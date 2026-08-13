@@ -4,6 +4,8 @@ import TwelveDaysBoard from '@/components/TwelveDaysBoard';
 import { prisma } from '@/lib/prisma';
 import { getCurrentYear } from '@/lib/year';
 
+export const dynamic = 'force-dynamic';
+
 export default async function HomePage() {
   const year = await getCurrentYear();
   const traditions = year
