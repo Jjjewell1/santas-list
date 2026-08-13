@@ -18,8 +18,10 @@ export async function setupAdmin(formData: FormData): Promise<ActionResult> {
 
   const existing = await prisma.admin.count();
   if (existing > 0) return { ok: false, error: 'An admin account already exists.' };
-  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) return { ok: false, error: 'Enter a valid email address.' };
-  if (password.length < 10) return { ok: false, error: 'Password must be at least 10 characters.' };
+  const isEmail = /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email);
+  const isUsername = /^[a-z0-9_.-]{3,}$/i.test(email);
+  if (!isEmail && !isUsername) return { ok: false, error: 'Enter a valid email or username.' };
+  if (password.length < 8) return { ok: false, error: 'Password must be at least 8 characters.' };
 
   const passwordHash = await hashSecret(password);
   await prisma.admin.create({ data: { email, passwordHash } });

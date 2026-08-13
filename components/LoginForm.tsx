@@ -25,9 +25,9 @@ export default function LoginForm({ mode }: { mode: 'login' | 'setup' }) {
     <form action={submit} className="flex flex-col gap-4">
       <div>
         <label htmlFor="email" className="label">
-          Email
+          Email or username
         </label>
-        <input id="email" name="email" type="email" required autoComplete="email" className="input" />
+        <input id="email" name="email" type="text" required autoComplete="username" className="input" />
       </div>
       <div>
         <label htmlFor="password" className="label">
@@ -39,9 +39,9 @@ export default function LoginForm({ mode }: { mode: 'login' | 'setup' }) {
           type="password"
           required
           autoComplete={mode === 'setup' ? 'new-password' : 'current-password'}
-          minLength={mode === 'setup' ? 10 : undefined}
+          minLength={mode === 'setup' ? 8 : undefined}
           className="input"
-          placeholder={mode === 'setup' ? 'At least 10 characters' : undefined}
+          placeholder={mode === 'setup' ? 'At least 8 characters' : undefined}
         />
       </div>
       <button type="submit" disabled={pending} className={mode === 'setup' ? 'btn-cran w-full' : 'btn-pine w-full'}>

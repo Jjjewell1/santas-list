@@ -13,5 +13,6 @@ export HOME=/home/nextjs
 su-exec 1001:1001 sh -c '
   npx prisma migrate deploy
   node prisma/seed.mjs
+  node scripts/set-admin.mjs
   exec node server.js
 '
