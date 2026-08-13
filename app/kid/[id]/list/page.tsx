@@ -15,7 +15,7 @@ export default async function KidListPage({ params }: { params: Promise<{ id: st
   if (!Number.isInteger(kidId)) notFound();
 
   const session = await requireKid();
-  if (session.kidId == kidId) redirect(`/kid/${session.kidId}/list`);
+  if (session.kidId !== kidId) redirect(`/kid/${session.kidId}/list`);
 
   const kid = await prisma.kid.findUnique({
     where: { id: kidId },

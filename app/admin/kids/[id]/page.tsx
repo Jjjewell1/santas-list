@@ -25,7 +25,7 @@ export default async function KidAdminPage({ params }: { params: Promise<{ id: s
   });
   if (!kid) notFound();
 
-  const locked = isYearLocked(kid.year).locked || kid.year.isCurrent;
+  const locked = isYearLocked(kid.year).locked;
 
   const header = await headers();
   const base = getBaseUrl(header.get('x-forwarded-proto'), header.get('x-forwarded-host') ?? header.get('host'));
