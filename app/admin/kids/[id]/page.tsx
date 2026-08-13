@@ -101,8 +101,8 @@ export default async function KidAdminPage({ params }: { params: Promise<{ id: s
           <ShareLinkBlock
             url={shareUrl}
             label="Shareable list link"
-            regenerate={() => regenerateShareToken(kid.id)}
-            revoke={() => revokeShareToken(kid.id)}
+            regenerate={regenerateShareToken.bind(null, kid.id)}
+            revoke={revokeShareToken.bind(null, kid.id)}
           />
         </div>
       </div>
