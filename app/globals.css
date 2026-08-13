@@ -1,0 +1,205 @@
+@import "tailwindcss";
+
+@theme {
+  --color-pine-950: #06251c;
+  --color-pine-900: #0a2f24;
+  --color-pine-800: #0e3d2e;
+  --color-pine-700: #13513d;
+  --color-pine-600: #1a6a50;
+  --color-pine-500: #23825f;
+  --color-pine-200: #b7e0d2;
+  --color-pine-100: #d9efe6;
+  --color-pine-50: #eef8f4;
+
+  --color-cran-700: #7f1426;
+  --color-cran-600: #9b1b30;
+  --color-cran-500: #b42336;
+  --color-cran-400: #c9444f;
+  --color-cran-300: #de7a82;
+  --color-cran-100: #f6d9dd;
+  --color-cran-50: #fdf0f1;
+
+  --color-gold-500: #c99a13;
+  --color-gold-400: #d4a017;
+  --color-gold-300: #f0c75e;
+  --color-gold-200: #f7dd92;
+  --color-gold-100: #fceec6;
+
+  --color-snow: #fbfaf5;
+  --color-ink: #22302b;
+  --color-ink-soft: #5b6b64;
+
+  --font-display: var(--font-fredoka), "Fredoka", ui-rounded, sans-serif;
+  --font-body: var(--font-nunito), "Nunito", ui-sans-serif, sans-serif;
+
+  --shadow-soft: 0 8px 24px -10px rgb(10 47 36 / 0.18);
+  --shadow-lift: 0 16px 36px -12px rgb(10 47 36 / 0.28);
+  --shadow-card: 0 4px 14px -6px rgb(10 47 36 / 0.14);
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-snow text-ink font-body antialiased;
+  }
+  h1, h2, h3, h4 {
+    @apply font-display;
+  }
+  button {
+    cursor: pointer;
+  }
+}
+
+@layer components {
+  .card {
+    @apply bg-white rounded-2xl shadow-soft border border-pine-100;
+  }
+  .btn-pine {
+    @apply inline-flex items-center justify-center gap-1.5 rounded-xl px-4 py-2.5 font-display font-semibold text-white bg-pine-700 hover:bg-pine-600 transition-all duration-150 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed shadow-soft;
+  }
+  .btn-cran {
+    @apply inline-flex items-center justify-center gap-1.5 rounded-xl px-4 py-2.5 font-display font-semibold text-white bg-cran-600 hover:bg-cran-500 transition-all duration-150 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed shadow-soft;
+  }
+  .btn-gold {
+    @apply inline-flex items-center justify-center gap-1.5 rounded-xl px-4 py-2.5 font-display font-semibold text-pine-950 bg-gold-400 hover:bg-gold-300 transition-all duration-150 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed shadow-soft;
+  }
+  .btn-ghost {
+    @apply inline-flex items-center justify-center gap-1.5 rounded-xl px-4 py-2.5 font-display font-semibold text-pine-800 bg-white border border-pine-200 hover:bg-pine-50 transition-all duration-150 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .input {
+    @apply w-full rounded-xl border border-pine-200 bg-white px-3.5 py-2.5 text-ink placeholder:text-ink-soft/60 focus:outline-none focus:ring-2 focus:ring-gold-400 focus:border-gold-400;
+  }
+  .label {
+    @apply block text-sm font-display font-semibold text-pine-800 mb-1.5;
+  }
+}
+
+@keyframes snowfall-fall {
+  0% {
+    transform: translate3d(0, -12vh, 0);
+  }
+  100% {
+    transform: translate3d(0, 112vh, 0);
+  }
+}
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 0.35;
+  }
+  50% {
+    opacity: 1;
+  }
+}
+@keyframes confetti-pop {
+  0% {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale(1) rotate(0deg);
+  }
+  100% {
+    opacity: 0;
+    transform: translate3d(var(--confetti-x, 0px), var(--confetti-y, 150px), 0) scale(0.4)
+      rotate(var(--confetti-rot, 240deg));
+  }
+}
+@keyframes float-slow {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+@keyframes wiggle {
+  0%,
+  100% {
+    transform: rotate(-3deg);
+  }
+  50% {
+    transform: rotate(3deg);
+  }
+}
+
+.snowflake {
+  position: absolute;
+  top: -12vh;
+  color: #ffffff;
+  opacity: 0.85;
+  user-select: none;
+  pointer-events: none;
+  animation-name: snowfall-fall;
+  animation-timing-function: linear;
+  animation-iteration-count: infinite;
+  will-change: transform;
+}
+
+.light-bulb {
+  animation: twinkle var(--twinkle-duration, 2.2s) ease-in-out infinite;
+  animation-delay: var(--twinkle-delay, 0s);
+}
+
+.confetti-piece {
+  position: absolute;
+  width: var(--confetti-w, 10px);
+  height: var(--confetti-h, 14px);
+  animation: confetti-pop var(--confetti-duration, 0.9s) ease-out forwards;
+  pointer-events: none;
+}
+
+.animate-float-slow {
+  animation: float-slow 5s ease-in-out infinite;
+}
+.animate-wiggle {
+  animation: wiggle 2.4s ease-in-out infinite;
+  transform-origin: 50% 100%;
+}
+
+/* 12 Days flip cards */
+.flip-card {
+  perspective: 1200px;
+}
+.flip-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.flip-card.flipped .flip-inner {
+  transform: rotateY(180deg);
+}
+.flip-face {
+  position: absolute;
+  inset: 0;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.flip-back {
+  transform: rotateY(180deg);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .snowflake,
+  .light-bulb,
+  .confetti-piece,
+  .animate-float-slow,
+  .animate-wiggle {
+    animation: none !important;
+  }
+}
+
+@media print {
+  .no-print {
+    display: none !important;
+  }
+  body {
+    background: #fff !important;
+  }
+  main,
+  .card {
+    box-shadow: none !important;
+  }
+}

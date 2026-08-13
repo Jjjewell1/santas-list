@@ -1,0 +1,19 @@
+services:
+  santas-list:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: santas-list
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - HOSTNAME=0.0.0.0
+      - DATABASE_URL=file:/app/data/christmas.db
+      - SESSION_SECRET=${SESSION_SECRET:?set SESSION_SECRET in .env or environment}
+      - NEXT_PUBLIC_BASE_URL=${NEXT_PUBLIC_BASE_URL:-http://localhost:3000}
+      - TZ=${TZ:-America/Chicago}
+    volumes:
+      - ./data:/app/data

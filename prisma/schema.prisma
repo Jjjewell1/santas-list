@@ -1,0 +1,94 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+// One archive unit per calendar year. Budgets, kids, items and traditions are
+// all scoped to a Year so previous years stay untouched and read-only.
+model Year {
+  id              Int       @id @default(autoincrement())
+  year            Int       @unique
+  isCurrent       Boolean   @default(false)
+  locked          Boolean   @default(false)
+  lockDaysBefore  Int?
+  familyShareToken String?  @unique
+  kids            Kid[]
+  traditions      Tradition[]
+  createdAt       DateTime  @default(now())
+
+  @@index([isCurrent])
+}
+
+model Kid {
+  id          Int     @id @default(autoincrement())
+  yearId      Int
+  year        Year    @relation(fields: [yearId], references: [id], onDelete: Cascade)
+
+  name        String
+  avatar      String  @default("🎄")
+  color       String  @default("#0f766e")
+  pinHash     String?
+  shareToken  String? @unique
+  position    Int     @default(0)
+
+  // Per-category budgets in whole cents. null = not configured by the parent yet.
+  bigBudget        Int?
+  smallBudget      Int?
+  wildcardEnabled  Boolean @default(true)
+  softCeilingEnabled Boolean @default(true)
+  softCeilingPct   Int     @default(60)
+
+  items       GiftItem[]
+  createdAt   DateTime  @default(now())
+
+  @@index([yearId])
+}
+
+model GiftItem {
+  id          Int      @id @default(autoincrement())
+  kidId       Int
+  kid         Kid      @relation(fields: [kidId], references: [id], onDelete: Cascade)
+
+  title       String
+  imageUrl    String?
+  price       Int?     // whole cents; null = kid didn't enter a price
+  productUrl  String?
+  category    String   // "big" | "small" | "wildcard"
+  claimedBy   String?  // relative's name; hidden from the kid
+  surpriseFlag Boolean @default(false)
+  position    Int      @default(0)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([kidId, category])
+}
+
+model Tradition {
+  id          Int    @id @default(autoincrement())
+  yearId      Int
+  year        Year   @relation(fields: [yearId], references: [id], onDelete: Cascade)
+  day         Int    // 1..12 (Dec 13 .. Dec 24)
+  title       String
+  description String
+  photoUrl    String?
+
+  @@unique([yearId, day])
+}
+
+model Activity {
+  id        Int      @id @default(autoincrement())
+  actor     String
+  action    String
+  detail    String?
+  createdAt DateTime @default(now())
+}
+
+model Admin {
+  id        Int    @id @default(autoincrement())
+  email     String @unique
+  passwordHash String
+}
