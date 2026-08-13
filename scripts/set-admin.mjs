@@ -18,6 +18,7 @@ function hashSecret(password) {
 async function main() {
   const username = (process.env.ADMIN_USERNAME || '').trim().toLowerCase();
   const password = process.env.ADMIN_PASSWORD || '';
+  const pin = (process.env.ADMIN_PIN || '').trim();
   if (!username || !password) {
     console.log('set-admin: ADMIN_USERNAME/ADMIN_PASSWORD not set — skipping.');
     return;
@@ -27,9 +28,13 @@ async function main() {
   // with the configured credentials on every start.
   await prisma.admin.deleteMany({});
   await prisma.admin.create({
-    data: { email: username, passwordHash: hashSecret(password) },
+    data: {
+      email: username,
+      passwordHash: hashSecret(password),
+      pinHash: pin ? hashSecret(pin) : null,
+    },
   });
-  console.log(`set-admin: parent account set to '${username}'.`);
+  console.log(`set-admin: parent account set to '${username}'${pin ? ` with PIN ${'•'.repeat(pin.length)}` : ''}.`);
 }
 
 main()

@@ -12,7 +12,7 @@ export default function KidPinForm({ kidId, kidName }: { kidId: number; kidName:
   const inputRef = useRef<HTMLInputElement>(null);
 
   const submit = () => {
-    if (pin.length == 4) {
+    if (pin.length !== 4) {
       setError('Enter all 4 digits.');
       return;
     }

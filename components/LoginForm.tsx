@@ -8,6 +8,7 @@ export default function LoginForm({ mode }: { mode: 'login' | 'setup' }) {
   const router = useRouter();
   const [error, setError] = useState<string | null>(null);
   const [pending, startTransition] = useTransition();
+  const [pin, setPin] = useState('');
 
   const submit = (formData: FormData) => {
     setError(null);
@@ -20,6 +21,35 @@ export default function LoginForm({ mode }: { mode: 'login' | 'setup' }) {
       router.refresh();
     });
   };
+
+  if (mode === 'login') {
+    return (
+      <form action={submit} className="flex flex-col gap-4">
+        <div>
+          <label htmlFor="pin" className="label">
+            Parent PIN
+          </label>
+          <input
+            id="pin"
+            name="pin"
+            inputMode="numeric"
+            maxLength={4}
+            pattern="\d{4}"
+            autoComplete="one-time-code"
+            autoFocus
+            placeholder="••••"
+            value={pin}
+            onChange={(e) => setPin(e.target.value.replace(/\D/g, ''))}
+            className="input text-center font-display text-3xl tracking-[0.6em]"
+          />
+        </div>
+        <button type="submit" disabled={pending || pin.length !== 4} className="btn-pine w-full">
+          {pending ? 'Working…' : 'Open the workshop'}
+        </button>
+        {error && <p className="text-sm font-semibold text-cran-500">{error}</p>}
+      </form>
+    );
+  }
 
   return (
     <form action={submit} className="flex flex-col gap-4">
@@ -38,14 +68,14 @@ export default function LoginForm({ mode }: { mode: 'login' | 'setup' }) {
           name="password"
           type="password"
           required
-          autoComplete={mode === 'setup' ? 'new-password' : 'current-password'}
-          minLength={mode === 'setup' ? 8 : undefined}
+          autoComplete="new-password"
+          minLength={8}
           className="input"
-          placeholder={mode === 'setup' ? 'At least 8 characters' : undefined}
+          placeholder="At least 8 characters"
         />
       </div>
-      <button type="submit" disabled={pending} className={mode === 'setup' ? 'btn-cran w-full' : 'btn-pine w-full'}>
-        {pending ? 'Working…' : mode === 'setup' ? 'Create parent account' : 'Sign in'}
+      <button type="submit" disabled={pending} className="btn-cran w-full">
+        {pending ? 'Working…' : 'Create parent account'}
       </button>
       {error && <p className="text-sm font-semibold text-cran-500">{error}</p>}
     </form>

@@ -33,12 +33,12 @@ export async function setupAdmin(formData: FormData): Promise<ActionResult> {
 }
 
 export async function parentLogin(formData: FormData): Promise<ActionResult> {
-  const email = String(formData.get('email') ?? '').trim().toLowerCase();
-  const password = String(formData.get('password') ?? '');
+  const pin = String(formData.get('pin') ?? '').trim();
+  if (!/^\d{4}$/.test(pin)) return { ok: false, error: 'PIN must be 4 digits.' };
 
-  const admin = await prisma.admin.findUnique({ where: { email } });
-  if (!admin || !(await verifySecret(password, admin.passwordHash))) {
-    return { ok: false, error: 'Wrong email or password.' };
+  const admin = await prisma.admin.findFirst();
+  if (!admin?.pinHash || !(await verifySecret(pin, admin.pinHash))) {
+    return { ok: false, error: 'Wrong PIN.' };
   }
 
   const token = await createSessionToken({ role: 'parent' }, 60 * 60 * 24 * 60);

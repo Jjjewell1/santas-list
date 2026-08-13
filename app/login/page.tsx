@@ -18,7 +18,7 @@ export default async function LoginPage() {
       <div className="card w-full max-w-sm p-8">
         <h1 className="mb-1 text-center text-2xl font-bold text-pine-900">Parents&rsquo; Workshop</h1>
         <p className="mb-6 text-center text-sm text-ink-soft">
-          {adminCount > 0 ? 'Sign in to manage this year\u2019s lists.' : 'Create the first parent account.'}
+          {adminCount > 0 ? 'Enter your 4-digit PIN to manage this year\u2019s lists.' : 'Create the first parent account.'}
         </p>
         <LoginForm mode={adminCount > 0 ? 'login' : 'setup'} />
       </div>

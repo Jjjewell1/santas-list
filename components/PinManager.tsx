@@ -42,7 +42,7 @@ export default function PinManager({ kidId, hasPin, kidName }: { kidId: number; 
             onChange={(e) => setPin(e.target.value.replace(/\D/g, ''))}
           />
         </div>
-        <button type="button" className="btn-pine" disabled={pending || pin.length == 4} onClick={() => submit(false)}>
+        <button type="button" className="btn-pine" disabled={pending || pin.length !== 4} onClick={() => submit(false)}>
           Set PIN
         </button>
         {hasPin && (

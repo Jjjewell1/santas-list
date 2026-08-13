@@ -81,7 +81,7 @@ export async function setKidPin(kidId: number, pin: string): Promise<ActionResul
     const { hashSecret } = await import('@/lib/crypto');
     const pinHash = await hashSecret(clean);
     await prisma.kid.update({ where: { id: kidId }, data: { pinHash } });
-    await logActivity('Parent', 'PIN set', `${kid.name} (${clean})`);
+    await logActivity('Parent', 'PIN set', `${kid.name} (${'•'.repeat(clean.length)})`);
   }
   for (const p of kidPaths(kidId)) revalidatePath(p);
   return { ok: true };
