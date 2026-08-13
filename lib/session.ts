@@ -22,7 +22,7 @@ export async function createSessionToken(payload: SessionPayload, maxAgeSeconds:
   return new SignJWT({ ...payload })
     .setProtectedHeader({ alg: ALG })
     .setIssuedAt()
-    .setExpirationTime(maxAgeSeconds)
+    .setExpirationTime(Math.floor(Date.now() / 1000) + maxAgeSeconds)
     .sign(getSecret());
 }
 
